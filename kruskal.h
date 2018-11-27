@@ -1,19 +1,18 @@
 #include <algorithm>
 #include "graph.h"
+#include "unionFind.h"
 
 #define MAX 1005  //maximo numero de vértices
 
 class Kruskal
 {
 private:
-    Graph* map;
-    Graph* pMST;
-    int V, E;
-    int weight;
-    string origin;
-    string destination;
-    int total;          //weight total del MST
-    int numAristas;     //Numero de Aristas del MST
+    Graph* map;             // grafo original para resolver
+    Graph* pMST;            // grafo resuelto se guarda en este ptr*
+    int nVortices, nEdges;  // nro de vertices y de aristas
+    int weight;             // peso de la arista actual
+    int total;              // peso total del MST
+    int nEdgesMST;         // Numero de Aristas del MST
 
 public:
     Kruskal(Graph* mygraph);
@@ -26,32 +25,19 @@ Kruskal::Kruskal(Graph* mygraph)
 {
     map = mygraph;
     total = 0;
-    numAristas = 0;
-    E = map->GetSize();
-    V = map->GetTotalVortex();
+    nEdgesMST = 0;
+    nEdges = map->GetSize();
+    nVortices = map->GetTotalVortex();
 };
 void Kruskal::resolve()
 {
-    
-    //Inicializamos cada componente
-    
-    //Ordenamos las aristas por su comparador [PENDIENTE]
+    UnionFind<Edge , EdgesList> uf; 
+    uf.Init( nVortices, (map->GetGraph()) );  // Inicializamos cada componente
 
-    for( int i = 0 ; i < E ; ++i )
-    {   
-        //Recorremos las aristas ya ordenadas por weight
-        origin = map->GetEdge(i)->GetOriginNode(); //Vértice origin de la arista actual
-        destination = map->GetEdge(i)->GetDestinationNode();  //Vértice destination de la arista actual
-        weight = map->GetEdge(i)->GetWeight();        //weight de la arista actual
+    uf.Sort();                              // Ordenamos las aristas por su comparador
 
-        //Verificamos si estan o no en la misma componente conexa
-        if( origin != destination )
-        {  //Evito ciclos
-            total += weight;              //Incremento el weight total del MST
-            pMST[numAristas++] = map[i];  //Agrego al MST la arista actual
-           //Union de ambas componentes en una sola [PENDIENTE]
-        }
-    }
+    uf.ShowItemsList();
+
 }
 
 
@@ -60,7 +46,7 @@ void Kruskal::layout()
     //Si el MST encontrado no posee todos los vértices mostramos mensaje de error
     //Para saber si contiene o no todos los vértices basta con que el numero
     //de aristas sea igual al numero de vertices - 1
-    if( V - 1 != numAristas )
+    if( nVortices - 1 != nEdgesMST )
     {
         puts("No existe MST valido para el grafo ingresado, el grafo debe ser conexo.");
         return;
@@ -68,7 +54,7 @@ void Kruskal::layout()
 
     puts( "-----El MST encontrado contiene las siguientes aristas-----");
     
-    for( int i = 0 ; i < numAristas ; ++i )
+    for( int i = 0 ; i < nEdgesMST ; ++i )
     {
         //( vertice u , vertice v ) : weight
         cout <<  "( " << pMST->GetEdge(i)->GetOriginNode() << " , " << pMST->GetEdge(i)->GetDestinationNode() << " ) : " << pMST->GetEdge(i)->GetWeight() << endl; 

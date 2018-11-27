@@ -39,6 +39,9 @@ public:
 
 	Edge* GetEdge(string vortexA, string vortexB);
 	Edge* GetEdge(int positionInVector);
+
+	EdgesList* GetGraph();
+	NodesList* GetRepGraph();
 };
 /***************************************************************************************
                                      DEFINICIONES
@@ -191,3 +194,14 @@ Edge* Graph::GetEdge(int positionInVector)
 	Edge* targetEdge = map[positionInVector];
 	return targetEdge;
 };
+
+EdgesList* Graph::GetGraph()
+{
+	return &map;	
+};
+
+NodesList* Graph::GetRepGraph()
+{
+	return &rep;		
+};
+

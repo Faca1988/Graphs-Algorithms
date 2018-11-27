@@ -12,9 +12,7 @@ public:
     Edge();
     Edge(string _origin, string _destination, int _weight);
     Edge(string _origin, string _destination);
-    
     void SetEdge(string _origin, string _destination, int _weight);
-
     void SetOriginNode(string _origin); 
     string GetOriginNode(void); 
     void SetDestinationNode(string _destination);
@@ -22,6 +20,10 @@ public:
     void SetNodes(string _origin, string _destination);
     void SetWeight(int _weight);
     int GetWeight(void);
+    bool operator < ( const Edge& edge ) const
+    {
+        return weight < edge.weight;
+    }
 };
 /***************************************************************************************
                                      DEFINICIONES
